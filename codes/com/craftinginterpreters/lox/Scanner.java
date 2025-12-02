@@ -32,29 +32,108 @@ public class Scanner {
     private void scanToken() {
         char c = advance();
         switch (c) {
-            case '(': addToken(LEFT_PAREN); break;
-            case ')': addToken(RIGHT_PAREN); break;
-            case '{': addToken(LEFT_BRACE); break;
-            case '}': addToken(RIGHT_BRACE); break;
-            case ',': addToken(COMMA); break;
-            case '.': addToken(DOT); break;
-            case '-': addToken(MINUS); break;
-            case '+': addToken(PLUS); break;
-            case ';': addToken(SEMICOLON); break;
-            case '*': addToken(STAR); break; 
+            case '(': 
+              addToken(LEFT_PAREN);
+              break;
 
+            case ')': 
+              addToken(RIGHT_PAREN);
+              break;
+
+            case '{': 
+              addToken(LEFT_BRACE);
+              break;
+
+            case '}': 
+              addToken(RIGHT_BRACE);
+              break;
+
+            case ',': 
+              addToken(COMMA);
+              break;
+
+            case '.': 
+              addToken(DOT);
+              break;
+
+            case '-': 
+              addToken(MINUS);
+              break;
+
+            case '+': 
+              addToken(PLUS); 
+              break;
+
+            case ';': 
+              addToken(SEMICOLON); 
+              break;
+
+            case '*': 
+              addToken(STAR);
+              break; 
+
+            case  '!' :
+              /*if(match('=')){
+                addToken(BANG_EQUAL);
+              }else{
+                addToken(BANG);
+              }*/ //以下の2行と同じ意味　BANG=!
+              addToken ( match ( '=' ) ? BANG_EQUAL : BANG );
+              break ;
+
+              case '=':
+                addToken(match('=') ? EQUAL_EQUAL : EQUAL);
+                break;
+
+              case '<':
+                addToken(match('=') ? LESS_EQUAL : LESS);
+                break;
+
+              case '>':
+                addToken(match('=') ? GREATER_EQUAL : GREATER);
+                break;
+
+              case  '/' :
+                if ( match ( '/' )) {
+                // 行末までがコメントです。
+              while ( peek () != '\n' && ! isAtEnd ()) advance (); 
+              } else {
+                addToken ( SLASH ); 
+              } break ;
+
+              case  ' ' :
+              case  '\r' :
+              case  '\t' :
+              // 空白を無視します。
+              break ; 
+              case '\n' :
+                line ++;
+                break ;
+                
             default:
                 Lox.error(line, "Unexpected character.");
                 break;
     }
-    }
   }
 
-     private boolean isAtEnd() {
-        return current >= source.length();
-    }
+  private  boolean  match ( char  expected ) {
+     if ( isAtEnd ( )) return  false ;
+     if ( source.charAt ( current ) != expected ) return false ; 
+     
+     current ++;
+     return true ; 
+  } 
 
-    private char advance() {
+  private  char  peek () {
+     if ( isAtEnd ()) return  '\0' ;
+     return  source . charAt ( current ); 
+  }
+
+  private boolean isAtEnd() {
+    return current >= source.length();
+  }
+
+  private char advance() {
     return source.charAt(current++);
   }
 
