@@ -95,8 +95,7 @@ public class Scanner {
 
               case  '/' :
                 if ( match ( '/' )) {
-                // 行末までがコメントです。
-              while ( peek () != '\n' && ! isAtEnd ()) advance (); 
+                while ( peek () != '\n' && ! isAtEnd ()) advance (); 
               } else {
                 addToken ( SLASH ); 
               } break ;
@@ -104,12 +103,15 @@ public class Scanner {
               case  ' ' :
               case  '\r' :
               case  '\t' :
-              // 空白を無視します。
               break ; 
               case '\n' :
                 line ++;
                 break ;
-                
+
+                case  '"' :
+                  文字列(); 
+                  break ;
+
             default:
                 Lox.error(line, "Unexpected character.");
                 break;
@@ -127,6 +129,23 @@ public class Scanner {
   private  char  peek () {
      if ( isAtEnd ()) return  '\0' ;
      return  source . charAt ( current ); 
+  }
+
+  private void string() {
+    while (peek() != '"' && !isAtEnd()) {
+      if (peek() == '\n') line++;
+      advance();
+    }
+
+    if (isAtEnd()) {
+      Lox.error(line, "Unterminated string.");
+      return;
+    }
+
+    advance();
+
+    String value = source.substring(start + 1, current - 1);
+    addToken(STRING, value);
   }
 
   private boolean isAtEnd() {
