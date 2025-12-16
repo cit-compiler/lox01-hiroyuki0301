@@ -1,6 +1,7 @@
 package com.craftinginterpreters.lox;
 
 class AstPrinter implements Expr.Visitor<String> {
+
   String print(Expr expr) {
     return expr.accept(this);
   }
@@ -8,7 +9,7 @@ class AstPrinter implements Expr.Visitor<String> {
   @Override
   public String visitBinaryExpr(Expr.Binary expr) {
     return parenthesize(expr.operator.lexeme,
-                        expr.left, expr.right);
+        expr.left, expr.right);
   }
 
   @Override
@@ -38,7 +39,7 @@ class AstPrinter implements Expr.Visitor<String> {
     builder.append(")");
 
     return builder.toString();
-    }
+  }
 
     public static void main(String[] args) {
     Expr expression = new Expr.Binary(
